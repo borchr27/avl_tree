@@ -33,7 +33,7 @@ class AVLTree<T> where T : IComparable<T>{
                     node = node.right;
             } else if (val.CompareTo(node.val) < 0){
                 if (node.left != null)
-                    node=node.left;
+                    node = node.left;
             } else if (val.CompareTo(node.val) == 0){
                 return true;
             }
@@ -49,15 +49,17 @@ class AVLTree<T> where T : IComparable<T>{
         var node = root;
         while (node != null){
             if (val.CompareTo(node.val) > 0){
+                if (node.right == null) {
+                    node.right = new Node(val); 
+                    return;
+                }
                 node = node.right;
-                if (node == null)
-                    node = new Node(val); 
-                    return;
             } else if (val.CompareTo(node.val) < 0) {
-                node = node.left;
-                if (node == null)
-                    node = new Node(val); 
+                if (node.left == null) {
+                    node.left = new Node(val); 
                     return;
+                }
+                node = node.left;
             }
         }
     }
@@ -82,6 +84,8 @@ class Top{
     static void Main(){
         var tree = new AVLTree<int>(5);
         tree.insert(6);
+        tree.insert(4);
+        tree.insert(7);
         tree.print(tree.root);
 
     }
