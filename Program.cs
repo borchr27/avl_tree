@@ -5,6 +5,7 @@ using System;
 class AVLTree<T> where T : IComparable<T>{
     public class Node{
         public T val;
+        public int height;
         public Node? left;
         public Node? right;
 
@@ -39,6 +40,15 @@ class AVLTree<T> where T : IComparable<T>{
             }
         }
         return false;
+    }
+
+    public int calculate_balance(Node node){
+        // calculate the balnce factor for a given node
+        if (node == null){
+            return 0;
+        } else {
+            return Math.Max(calculate_balance(node.left), calculate_balance(node.right));
+        }
     }
 
     public void insert(T val){
@@ -82,11 +92,13 @@ class AVLTree<T> where T : IComparable<T>{
 
 class Top{
     static void Main(){
-        var tree = new AVLTree<int>(5);
-        tree.insert(6);
+        var tree = new AVLTree<int>(3);
+        tree.insert(1);
         tree.insert(4);
-        tree.insert(7);
+        tree.insert(0);
+        tree.insert(2);
         tree.print(tree.root);
+        WriteLine(tree.calculate_balance(tree.root));
 
     }
 }
