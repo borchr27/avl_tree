@@ -77,7 +77,7 @@ class AVLTree<T> where T : IComparable<T>{
         return false;
     }
 
-    public void right_rotate(Node x) {
+    private void right_rotate(Node x) {
         // separate the right(parent) and left(child) nodes and make the L node the parent and the R node the child (CW rotation)
         //       x 
         //     y   c
@@ -114,7 +114,7 @@ class AVLTree<T> where T : IComparable<T>{
         y.height = 1 + Max(node_height(y.left), node_height(y.right));
     }
 
-    public void left_rotate(Node x) {
+    private void left_rotate(Node x) {
         // same idea as for the right rotate except it is mirrored (CCW rotation)
         Node y = x.right!;
         x.right = y.left;
@@ -150,8 +150,10 @@ class AVLTree<T> where T : IComparable<T>{
             y = temp_node;
             if (val.CompareTo(temp_node.val) < 0){ 
                 temp_node = temp_node.left;
-            } else {
+            } else if (val.CompareTo(temp_node.val) > 0){
                 temp_node = temp_node.right;
+            } else if (val.CompareTo(temp_node.val) == 0){
+                return;
             }
         }
 
@@ -230,7 +232,7 @@ class AVLTree<T> where T : IComparable<T>{
         }
     }
 
-    public void move_up(Node u, Node v) {
+    private void move_up(Node u, Node v) {
         // helper method to rearrange nodes
         if (u.parent == null){
             // here u is root
@@ -248,7 +250,7 @@ class AVLTree<T> where T : IComparable<T>{
         }
     }
 
-    public void delete_rebalance(Node node) {
+    private void delete_rebalance(Node node) {
         // balancing method for deletion
         Node? p = node;
 
@@ -257,7 +259,7 @@ class AVLTree<T> where T : IComparable<T>{
             // parent of the parent is unbalanced 
             if (calculate_balance(p) <= -2 || calculate_balance(p) >= 2) {
                 Node x_node, y, z;
-                x_node = p!;
+                x_node = p;
                 
                 // here the taller child of x is y
                 if (x_node.left.height > x_node.right.height) {
@@ -370,7 +372,8 @@ class AVLTree<T> where T : IComparable<T>{
 
 class Top{
     static void Main(){
-        basic_I_O_test();
+        //basic_I_O_test();
+        medium_test(10);
     }
 
     static void basic_I_O_test(){
@@ -398,6 +401,31 @@ class Top{
         tree.print(tree.root!);
         WriteLine(tree.count_nodes());
         WriteLine(tree.node_height(tree.root));
+    }
+
+    static void medium_test(int number_of_items){
+        var tree = new AVLTree<int>();
+        var values = new HashSet<int>();
+
+        for (int i = 0; i < number_of_items; i++) {
+            Random r = new Random();
+            int rand = r.Next(0, 1_000); //for ints
+            values.Add(rand);
+        }
+        
+        foreach (var v in values) {
+            tree.insert(v); 
+        }
+
+        WriteLine(tree.count_nodes());
+        WriteLine(tree.node_height(tree.root));
+        WriteLine(tree.root.val);
+        tree.ordered_print(tree.root);
+        WriteLine();
+        foreach (var v in values) {
+            tree.delete_node(v);
+        }
+        WriteLine(tree.count_nodes());
     }
 
 }
