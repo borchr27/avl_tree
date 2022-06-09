@@ -35,7 +35,7 @@ class AVLTree<T> where T : IComparable<T>{
         // the difference between the height of the left subtree and that of the right subtree of the node
         if (node == null)
             return 0;
-        
+
         return node_height(node.left) - node_height(node.right);
     }
 
@@ -125,10 +125,11 @@ class AVLTree<T> where T : IComparable<T>{
         y.parent = x.parent;
         if (x.parent == null) {
             this.root = y;
-        } else if (x == x.parent.right) {
-            x.parent.right = y;
         } else if (x == x.parent.left) {
             x.parent.left = y;
+        }
+        else {
+            x.parent.right = y;
         }
 
         y.left = x;
@@ -148,7 +149,7 @@ class AVLTree<T> where T : IComparable<T>{
         // cycle through to find location for insert
         while (temp_node != null) {
             y = temp_node;
-            if (val.CompareTo(temp_node.val) < 0){ 
+            if (val.CompareTo(temp_node.val) < 0){
                 temp_node = temp_node.left;
             } else if (val.CompareTo(temp_node.val) > 0){
                 temp_node = temp_node.right;
@@ -166,7 +167,7 @@ class AVLTree<T> where T : IComparable<T>{
         } else {
             y.right = n;
         }
-        
+
         // meat and potatoes of insert
         Node z = n;
         while(y != null) {
@@ -178,8 +179,8 @@ class AVLTree<T> where T : IComparable<T>{
                     // y is left child of x and z is left child of y - handles LL and L case
                     if (z == x_node.right.right) {
                         left_rotate(x_node);
-                    // y is right child of x and z is left child of y - RL case
-                    } else if (z == x_node.right.left) { 
+                        // y is right child of x and z is left child of y - RL case
+                    } else if (z == x_node.right.left) {
                         right_rotate(y);
                         left_rotate(x_node);
                     }
@@ -187,7 +188,7 @@ class AVLTree<T> where T : IComparable<T>{
                     // y is right child of x and z is right child of y - handles RR and R case
                     if(z == x_node.left.left) {
                         right_rotate(x_node);
-                    // if y is left child of x and z is right child of y - LR case
+                        // if y is left child of x and z is right child of y - LR case
                     } else if(z == x_node.left.right) {
                         left_rotate(y);
                         right_rotate(x_node);
@@ -237,10 +238,10 @@ class AVLTree<T> where T : IComparable<T>{
         if (u.parent == null){
             // here u is root
             root = v;
-        } else if (u == u.parent.left){ 
+        } else if (u == u.parent.left){
             // here u is left child
             u.parent.left = v;
-        } else { 
+        } else {
             // here u is right child
             u.parent.right = v;
         }
@@ -260,20 +261,20 @@ class AVLTree<T> where T : IComparable<T>{
             if (calculate_balance(p) <= -2 || calculate_balance(p) >= 2) {
                 Node x_node, y, z;
                 x_node = p;
-                
+
                 // here the taller child of x is y
-                if (x_node.left.height > x_node.right.height) {
+                if (node_height(x_node.left) > node_height(x_node.right)) {
                     y = x_node.left;
                 } else {
                     y = x_node.right;
                 }
-                
+
                 // here the taller child of y is z
-                if (y.left.height > y.right.height) {
+                if (node_height(y.left) > node_height(y.right)) {
                     z = y.left;
-                } else if (y.left.height < y.right.height) {
+                } else if (node_height(y.left) < node_height(y.right)) {
                     z = y.right;
-                } else { 
+                } else {
                     // here they are the same height, take a single rotation
                     if (y == x_node.left) {
                         z = y.left;
@@ -287,7 +288,7 @@ class AVLTree<T> where T : IComparable<T>{
                     if (z == x_node.right.right) {
                         left_rotate(x_node);
                     // y is right child of x and z is left child of y - RL case
-                    } else if (z == x_node.right.left) { 
+                    } else if (z == x_node.right.left) {
                         right_rotate(y);
                         left_rotate(x_node);
                     }
@@ -346,7 +347,7 @@ class AVLTree<T> where T : IComparable<T>{
         } else {
             // two child node case, get min node in right subtree and move up
             // set right and left child, rebalance
-            Node y = minimum(z.right); 
+            Node y = minimum(z.right);
             if (y.parent != z) {
                 move_up(y, y.right);
                 y.right = z.right;
@@ -373,7 +374,7 @@ class AVLTree<T> where T : IComparable<T>{
 class Top{
     static void Main(){
         //basic_I_O_test();
-        medium_test(10);
+        medium_test(10_000_000);
     }
 
     static void basic_I_O_test(){
@@ -403,29 +404,35 @@ class Top{
         WriteLine(tree.node_height(tree.root));
     }
 
-    static void medium_test(int number_of_items){
+    static void medium_test(int number_of_items) {
         var tree = new AVLTree<int>();
         var values = new HashSet<int>();
 
-        for (int i = 0; i < number_of_items; i++) {
-            Random r = new Random();
-            int rand = r.Next(0, 1_000); //for ints
-            values.Add(rand);
-        }
+        WriteLine($"inserting {number_of_items:n0} items...");
         
-        foreach (var v in values) {
-            tree.insert(v); 
+        for (int i = 1; i <= number_of_items; i++) {
+            Random r = new Random();
+            int rand = r.Next(0, 1_000_000_000); //for ints
+            if (!values.Add(i))
+            {
+                i -= 1;
+            }
         }
 
-        WriteLine(tree.count_nodes());
-        WriteLine(tree.node_height(tree.root));
-        WriteLine(tree.root.val);
-        tree.ordered_print(tree.root);
-        WriteLine();
+        foreach (var v in values) {
+            tree.insert(v);
+        }
+
+        WriteLine($"number of items in tree: {tree.count_nodes():n0}");
+        WriteLine($"tree height: {tree.node_height(tree.root)}");
+        WriteLine($"tree root node value: {tree.root.val:n0}");
+        WriteLine("deleting items...");
+
         foreach (var v in values) {
             tree.delete_node(v);
         }
-        WriteLine(tree.count_nodes());
+
+        WriteLine($"number of items in tree: {tree.count_nodes()}");
     }
 
 }
