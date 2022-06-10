@@ -226,9 +226,9 @@ class AVLTree<T> where T : IComparable<T>{
 
     public void ordered_print(Node n){
         if (n != null){
-            ordered_print(n.left);
+            ordered_print(n.left!);
             Write($"{n.val} ");
-            ordered_print(n.right);
+            ordered_print(n.right!);
         }
     }
 
@@ -263,22 +263,22 @@ class AVLTree<T> where T : IComparable<T>{
 
                 // here the taller child of x is y
                 if (node_height(x_node.left) > node_height(x_node.right)) {
-                    y = x_node.left;
+                    y = x_node.left!;
                 } else {
-                    y = x_node.right;
+                    y = x_node.right!;
                 }
 
                 // here the taller child of y is z
                 if (node_height(y.left) > node_height(y.right)) {
-                    z = y.left;
+                    z = y.left!;
                 } else if (node_height(y.left) < node_height(y.right)) {
-                    z = y.right;
+                    z = y.right!;
                 } else {
                     // here they are the same height, take a single rotation
                     if (y == x_node.left) {
-                        z = y.left;
+                        z = y.left!;
                     } else {
-                        z = y.right;
+                        z = y.right!;
                     }
                 }
 
@@ -314,7 +314,7 @@ class AVLTree<T> where T : IComparable<T>{
         }
 
         Node? n = root!;
-        Node? z = null;
+        Node z = root;
         // find the node to delete
         while (n != null){
             if (val.CompareTo(n.val) > 0){
@@ -332,7 +332,7 @@ class AVLTree<T> where T : IComparable<T>{
         // if there is no left subtree to the deleted node then 
         // move the right subtree up and reblance
         if (z.left == null) {
-            move_up(z, z.right);
+            move_up(z, z.right!);
             if (z.right != null) {
                 delete_rebalance(z.right);
             }
@@ -348,7 +348,7 @@ class AVLTree<T> where T : IComparable<T>{
             // set right and left child, rebalance
             Node y = minimum(z.right);
             if (y.parent != z) {
-                move_up(y, y.right);
+                move_up(y, y.right!);
                 y.right = z.right;
                 y.right.parent = y;
             }

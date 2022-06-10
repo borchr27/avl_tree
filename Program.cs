@@ -66,7 +66,7 @@ class Top{
 
         WriteLine($"\t Number of items in tree: {tree.NodeCount():n0}");
         WriteLine($"\t Tree height: {tree.GetTreeDepth()}");
-        WriteLine($"\t Tree root node value: {tree.Root.Data:n0}");
+        WriteLine($"\t Tree root node value: {tree.Root!.Data:n0}");
         
         Write("\t Deleting items... ");
         foreach (var v in values) {
@@ -131,7 +131,7 @@ class Top{
 
         WriteLine($"\t Number of items in tree: {tree.count_nodes():n0}");
         WriteLine($"\t Tree height: {tree.node_height(tree.root)}");
-        WriteLine($"\t Tree root node value: {tree.root.val:n0}");
+        WriteLine($"\t Tree root node value: {tree.root!.val:n0}");
         
         Write("\t Deleting items... ");
         foreach (var v in values) {

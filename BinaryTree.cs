@@ -2,8 +2,8 @@
 
 class Node
 {
-    public Node LeftNode { get; set; }
-    public Node RightNode { get; set; }
+    public Node? LeftNode { get; set; }
+    public Node? RightNode { get; set; }
     public int Data { get; set; }
 }
 
@@ -24,7 +24,8 @@ class BinaryTree
 
     public bool Add(int value)
     {
-        Node before = null, after = this.Root;
+        Node? before = null;
+        Node? after = this.Root;
 
         while (after != null)
         {
@@ -47,7 +48,7 @@ class BinaryTree
             this.Root = newNode;
         else
         {
-            if (value < before.Data)
+            if (value < before!.Data)
                 before.LeftNode = newNode;
             else
                 before.RightNode = newNode;
@@ -63,10 +64,12 @@ class BinaryTree
 
     public void Remove(int value)
     {
-        this.Root = Remove(this.Root, value);
+        if (this.Root != null){
+            this.Root = Remove(this.Root, value);
+        }
     }
 
-    private Node Remove(Node parent, int key)
+    private Node? Remove(Node? parent, int key)
     {
         if (parent == null) return parent;
 
@@ -131,10 +134,10 @@ class BinaryTree
 
     public int GetTreeDepth()
     {
-        return this.GetTreeDepth(this.Root);
+        return this.Root == null ? 0 : this.GetTreeDepth(this.Root);
     }
 
-    private int GetTreeDepth(Node parent)
+    private int GetTreeDepth(Node? parent)
     {
         return parent == null ? 0 : Math.Max(GetTreeDepth(parent.LeftNode), GetTreeDepth(parent.RightNode)) + 1;
     }
