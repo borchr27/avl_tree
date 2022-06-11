@@ -7,19 +7,19 @@ class Node
     public int Data { get; set; }
 }
 
-class BinaryTree : ISet<int>
+class BinaryTree : ITree<int>
 {
     public Node? Root;
-    private int node_count;
+    private int num_nodes;
 
     public BinaryTree()
     {
-        node_count = 0;
+        num_nodes = 0;
         Root = null;
     }
 
-    public int NodeCount(){
-        return node_count;
+    public int node_count(){
+        return num_nodes;
     }
 
     public bool add(int value)
@@ -53,7 +53,7 @@ class BinaryTree : ISet<int>
             else
                 before.RightNode = newNode;
         }
-        node_count += 1;
+        num_nodes += 1;
         return true;
     }
 
@@ -90,11 +90,11 @@ class BinaryTree : ISet<int>
             
             // node with only one child or no child  
             if (parent.LeftNode == null) {
-                node_count -= 1;
+                num_nodes -= 1;
                 return parent.RightNode;
             }
             else if (parent.RightNode == null) {
-                node_count -= 1;
+                num_nodes -= 1;
                 return parent.LeftNode;
             }
             
@@ -138,13 +138,13 @@ class BinaryTree : ISet<int>
         return null;
     }
 
-    public int GetTreeDepth()
+    public int get_tree_depth()
     {
-        return this.Root == null ? 0 : this.GetTreeDepth(this.Root);
+        return this.Root == null ? 0 : this.get_tree_depth(this.Root);
     }
 
-    private int GetTreeDepth(Node? parent)
+    private int get_tree_depth(Node? parent)
     {
-        return parent == null ? 0 : Math.Max(GetTreeDepth(parent.LeftNode), GetTreeDepth(parent.RightNode)) + 1;
+        return parent == null ? 0 : Math.Max(get_tree_depth(parent.LeftNode), get_tree_depth(parent.RightNode)) + 1;
     }
 }

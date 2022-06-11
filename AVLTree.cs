@@ -1,7 +1,7 @@
 using static System.Console;
 using static System.Math;
 
-class AVLTree<T> : ISet<T> where T : IComparable<T>{
+class AVLTree<T> : ITree<T> where T : IComparable<T>{
     public class Node{
         public T val;
         public int height;
@@ -25,7 +25,11 @@ class AVLTree<T> : ISet<T> where T : IComparable<T>{
         num_nodes = 0;
     }
 
-    public int node_height(Node? node){
+    public int get_tree_depth(){
+        return root == null ? -1 : root.height;
+    }
+
+    public int get_tree_depth(Node? node){
         return node == null ? -1 : node.height;
     }
 
@@ -35,7 +39,7 @@ class AVLTree<T> : ISet<T> where T : IComparable<T>{
         if (node == null)
             return 0;
 
-        return node_height(node.left) - node_height(node.right);
+        return get_tree_depth(node.left) - get_tree_depth(node.right);
     }
 
     public Node minimum(Node n) {
@@ -109,8 +113,8 @@ class AVLTree<T> : ISet<T> where T : IComparable<T>{
         x.parent = y;
 
         // set node heights
-        x.height = 1 + Max(node_height(x.left), node_height(x.right));
-        y.height = 1 + Max(node_height(y.left), node_height(y.right));
+        x.height = 1 + Max(get_tree_depth(x.left), get_tree_depth(x.right));
+        y.height = 1 + Max(get_tree_depth(y.left), get_tree_depth(y.right));
     }
 
     private void left_rotate(Node x) {
@@ -134,8 +138,8 @@ class AVLTree<T> : ISet<T> where T : IComparable<T>{
         y.left = x;
         x.parent = y;
 
-        x.height = 1 + Max(node_height(x.left), node_height(x.right));
-        y.height = 1 + Max(node_height(y.left), node_height(y.right));
+        x.height = 1 + Max(get_tree_depth(x.left), get_tree_depth(x.right));
+        y.height = 1 + Max(get_tree_depth(y.left), get_tree_depth(y.right));
     }
 
     public bool add(T val){
@@ -170,7 +174,7 @@ class AVLTree<T> : ISet<T> where T : IComparable<T>{
         // meat and potatoes of insert
         Node z = n;
         while(y != null) {
-            y.height = 1 + Max(node_height(y.left), node_height(y.right));
+            y.height = 1 + Max(get_tree_depth(y.left), get_tree_depth(y.right));
             Node x_node = y.parent!;
 
             if(calculate_balance(x_node) <= -2 || calculate_balance(x_node) >= 2) {
@@ -202,7 +206,7 @@ class AVLTree<T> : ISet<T> where T : IComparable<T>{
         return true;
     }
 
-    public int count_nodes(){
+    public int node_count(){
         /// This method returns the number of nodes currently in the tree
         return num_nodes;
     }
@@ -256,23 +260,23 @@ class AVLTree<T> : ISet<T> where T : IComparable<T>{
         Node? p = node;
 
         while (p != null) {
-            p.height = 1 + Max(node_height(p.left), node_height(p.right));
+            p.height = 1 + Max(get_tree_depth(p.left), get_tree_depth(p.right));
             // parent of the parent is unbalanced 
             if (calculate_balance(p) <= -2 || calculate_balance(p) >= 2) {
                 Node x_node, y, z;
                 x_node = p;
 
                 // here the taller child of x is y
-                if (node_height(x_node.left) > node_height(x_node.right)) {
+                if (get_tree_depth(x_node.left) > get_tree_depth(x_node.right)) {
                     y = x_node.left!;
                 } else {
                     y = x_node.right!;
                 }
 
                 // here the taller child of y is z
-                if (node_height(y.left) > node_height(y.right)) {
+                if (get_tree_depth(y.left) > get_tree_depth(y.right)) {
                     z = y.left!;
-                } else if (node_height(y.left) < node_height(y.right)) {
+                } else if (get_tree_depth(y.left) < get_tree_depth(y.right)) {
                     z = y.right!;
                 } else {
                     // here they are the same height, take a single rotation
