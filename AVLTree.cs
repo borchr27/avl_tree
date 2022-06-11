@@ -1,7 +1,7 @@
 using static System.Console;
 using static System.Math;
 
-class AVLTree<T> where T : IComparable<T>{
+class AVLTree<T> : ISet<T> where T : IComparable<T>{
     public class Node{
         public T val;
         public int height;
@@ -138,7 +138,7 @@ class AVLTree<T> where T : IComparable<T>{
         y.height = 1 + Max(node_height(y.left), node_height(y.right));
     }
 
-    public void insert(T val){
+    public bool add(T val){
         // This method inserts a value and balances the tree
         // There are four options for rebalancing the tree that could occur 
         Node? temp_node = root;
@@ -153,7 +153,7 @@ class AVLTree<T> where T : IComparable<T>{
             } else if (val.CompareTo(temp_node.val) > 0){
                 temp_node = temp_node.right;
             } else if (val.CompareTo(temp_node.val) == 0){
-                return;
+                return false;
             }
         }
 
@@ -199,6 +199,7 @@ class AVLTree<T> where T : IComparable<T>{
             z = z.parent!;
         }
         num_nodes += 1;
+        return true;
     }
 
     public int count_nodes(){
@@ -307,10 +308,10 @@ class AVLTree<T> where T : IComparable<T>{
     }
 
 
-    public bool delete_node(T val) {
+    public void remove(T val) {
         // delete main driver function
         if (root == null) {
-            return false;
+            return;
         }
 
         Node? n = root!;
@@ -325,7 +326,7 @@ class AVLTree<T> where T : IComparable<T>{
                 z = n;
                 break;
             } else {
-                return false;
+                return;
             }
         }
 
@@ -362,6 +363,6 @@ class AVLTree<T> where T : IComparable<T>{
         }
 
         num_nodes -= 1;
-        return true;
+        return;
     }
 }

@@ -8,8 +8,8 @@ class Top{
         // AVL_basic_test();
         // BST_basic_test();
 
-        AVL_medium_test(1_000_000);
-        BST_medium_test(1_000_000);
+        // AVL_medium_test_rand(1_000_000);
+        // BST_medium_test_rand(1_000_000);
 
     }
 
@@ -20,7 +20,7 @@ class Top{
 
         foreach (var v in vals) {
             WriteLine($"\t Inserting {v}...  ");
-            tree.Add(v);
+            tree.add(v);
         }
 
         WriteLine($"\t Number of items in tree: {tree.NodeCount():n0}");
@@ -28,12 +28,12 @@ class Top{
 
         foreach (var v in vals) {
             WriteLine($"\t Deleting {v}... ");
-            tree.Remove(v);
+            tree.remove(v);
         }
         WriteLine($"\t Number of items in tree: {tree.NodeCount():n0}");
     }
 
-    static void BST_medium_test(int number_of_items){
+    static void BST_medium_test_rand(int number_of_items){
         Stopwatch stopwatch = new Stopwatch();
         WriteLine($"BST Medium Test");
         var tree = new BinaryTree();
@@ -50,7 +50,7 @@ class Top{
         Write($"\t Inserting {number_of_items:n0} items... ");
         stopwatch.Start();
         foreach (var v in values) {
-            tree.Add(v);
+            tree.add(v);
         }
         stopwatch.Stop();
         WriteLine("DONE");
@@ -58,7 +58,7 @@ class Top{
 
         Write($"\t Finding all values... ");
         foreach (var v in values) {
-            if (tree.Find(v) == null){
+            if (tree.find(v) == false){
                 WriteLine($"\t ERROR: {v} could not be found");
             }
         }
@@ -70,7 +70,7 @@ class Top{
         
         Write("\t Deleting items... ");
         foreach (var v in values) {
-            tree.Remove(v);
+            tree.remove(v);
         }
         WriteLine("DONE");
 
@@ -85,7 +85,7 @@ class Top{
 
         foreach (var v in vals) {
             WriteLine($"\t inserting {v}... ");
-            tree.insert(v);
+            tree.add(v);
         }
 
         WriteLine($"\t number of items in tree: {tree.count_nodes():n0}");
@@ -93,13 +93,13 @@ class Top{
 
         foreach (var v in vals) {
             WriteLine($"\t deleting {v}... ");
-            tree.delete_node(v);
+            tree.remove(v);
         }
 
         WriteLine($"\t number of items in tree: {tree.count_nodes():n0}");
     }
 
-    static void AVL_medium_test(int number_of_items) {
+    static void AVL_medium_test_rand(int number_of_items) {
         Stopwatch stopwatch = new Stopwatch();
         WriteLine($"AVL Medium Test");
         var tree = new AVLTree<int>();
@@ -115,7 +115,7 @@ class Top{
         stopwatch.Start();
         Write($"\t Inserting {number_of_items:n0} items... ");
         foreach (var v in values) {
-            tree.insert(v);
+            tree.add(v);
         }
         stopwatch.Stop();
         WriteLine("DONE");
@@ -135,11 +135,62 @@ class Top{
         
         Write("\t Deleting items... ");
         foreach (var v in values) {
-            tree.delete_node(v);
+            tree.remove(v);
         }
         WriteLine("DONE");
 
         WriteLine($"\t Number of items in tree: {tree.count_nodes()}");
+        WriteLine("Test Complete!");
+    }
+
+    
+    static void medium_inc_test(){
+        // TO DO
+    }
+    
+    static void medium_rand_test(int number_of_items){
+        Stopwatch stopwatch = new Stopwatch();
+        WriteLine($"Medium Random Tree Test");
+        var avl = new AVLTree<int>();
+        var bst = new BinaryTree();
+        var values = new HashSet<int>();
+
+        Random r = new Random();
+        for (int i = 1; i <= number_of_items; i++) {
+            int rand = r.Next(0, 1_000_000_000); //for ints
+            while (!values.Add(rand)) {
+                rand -= 1;
+            }
+        }
+
+        stopwatch.Start();
+        Write($"\t Inserting {number_of_items:n0} items... ");
+        foreach (var v in values) {
+            avl.add(v);
+        }
+        stopwatch.Stop();
+        WriteLine("DONE");
+        WriteLine($"\t Elapsed time for insert is {stopwatch.ElapsedMilliseconds} ms");
+
+        Write($"\t Finding all values... ");
+        foreach (var v in values) {
+            if (!avl.find(v)){
+                WriteLine($"\t ERROR: {v} could not be found");
+            }
+        }
+        WriteLine("DONE");
+
+        WriteLine($"\t Number of items in tree: {avl.count_nodes():n0}");
+        WriteLine($"\t Tree height: {avl.node_height(avl.root)}");
+        WriteLine($"\t Tree root node value: {avl.root!.val:n0}");
+        
+        Write("\t Deleting items... ");
+        foreach (var v in values) {
+            avl.remove(v);
+        }
+        WriteLine("DONE");
+
+        WriteLine($"\t Number of items in tree: {avl.count_nodes()}");
         WriteLine("Test Complete!");
     }
 }

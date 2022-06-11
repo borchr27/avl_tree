@@ -7,7 +7,7 @@ class Node
     public int Data { get; set; }
 }
 
-class BinaryTree
+class BinaryTree : ISet<int>
 {
     public Node? Root;
     private int node_count;
@@ -22,7 +22,7 @@ class BinaryTree
         return node_count;
     }
 
-    public bool Add(int value)
+    public bool add(int value)
     {
         Node? before = null;
         Node? after = this.Root;
@@ -57,12 +57,12 @@ class BinaryTree
         return true;
     }
 
-    public Node? Find(int value)
+    public bool find(int value)
     {
-        return this.Find(value, this.Root);
+        return this.Find(value, this.Root) != null ? true : false;
     }
 
-    public void Remove(int value)
+    public void remove(int value)
     {
         if (this.Root != null){
             this.Root = Remove(this.Root, value);
@@ -71,7 +71,9 @@ class BinaryTree
 
     private Node? Remove(Node? parent, int key)
     {
-        if (parent == null) return parent;
+        if (parent == null) {
+            return parent;
+        }
 
         if (key < parent.Data)
         {
@@ -122,11 +124,15 @@ class BinaryTree
     {
         if (parent != null)
         {
-            if (value == parent.Data) return parent;
-            if (value < parent.Data)
+            if (value == parent.Data){
+                 return parent;
+            }
+
+            if (value < parent.Data){
                 return Find(value, parent.LeftNode);
-            else
+            } else {
                 return Find(value, parent.RightNode);
+            }
         }
 
         return null;
